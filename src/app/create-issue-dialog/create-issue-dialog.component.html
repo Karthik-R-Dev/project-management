@@ -1,0 +1,35 @@
+<div class="container">
+    <h2 mat-dialog-title>Create Issue</h2>
+    <mat-dialog-content>
+        <form [formGroup]="issueDetail">
+         <mat-form-field style="width: 30rem;" appearance="outline">
+             <mat-label>Issue</mat-label>
+             <input  formControlName="issueName" matInput required>
+         </mat-form-field><br>
+         <mat-form-field style="width: 30rem;" appearance="outline">
+             <mat-label>Project Name</mat-label>
+             <input formControlName="projectName" matInput required>
+         </mat-form-field><br>
+         <mat-form-field style="width: 30rem;" appearance="outline">
+             <mat-label>Total bugs</mat-label>
+             <input formControlName="count" matInput required>
+         </mat-form-field><br>
+         <!-- <mat-form-field style="width: 30rem;" appearance="outline">
+             <mat-label> Issue Status</mat-label>
+             <mat-select formControlName="issueStatus">
+                 <mat-option disabled value="Active">Active</mat-option>
+                 <mat-option value="Closed">Closed</mat-option>
+             </mat-select> 
+         </mat-form-field> -->
+        </form>
+     </mat-dialog-content>
+     <mat-dialog-actions align="end">
+         <button mat-stroked-button color="primary" (click)="addIssue()"  mat-dialog-close>
+            {{actionBtn}}
+         </button>
+         <button mat-stroked-button mat-dialog-close (click)="closedIssue()">
+             close
+         </button>
+     </mat-dialog-actions>
+</div>
+

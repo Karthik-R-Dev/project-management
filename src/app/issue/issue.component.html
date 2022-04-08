@@ -1,0 +1,197 @@
+<div class="proj">
+  <div>
+    <div class="cards">
+      <mat-card  class="card-one">
+        <mat-card-title>Total Issues</mat-card-title>
+        <div class="d-flex justify-content-center mt-3 ml-5">
+          <circle-progress [percent]=total_issues [titleFontSize]="'40'" [showSubtitle]="false" [showUnits]="false" [radius]="60" [outerStrokeWidth]="6" [innerStrokeWidth]="0  " [backgroundPadding]="5" [backgroundColor]="'#FDB900'"
+            [outerStrokeColor]="'#FFFFFF'" [innerStrokeColor]="'#C7E596'" [animation]="true" [animationDuration]="300">
+          </circle-progress>
+        </div>
+      </mat-card>
+      <mat-card class="card-one">
+        <mat-card-title>Active Issues</mat-card-title>
+        <div class="d-flex justify-content-center mt-3 ml-5">
+          <circle-progress [percent]=active_value title={{active_issues}} [radius]="70" [outerStrokeWidth]="6" [showSubtitle]="false" [showUnits]="false" [innerStrokeWidth]="3"
+            [outerStrokeColor]="'#78C000'" [clockwise]="false" [innerStrokeColor]="'#C7E596'" [animation]="true" [animationDuration]="300">
+          </circle-progress>
+        </div>
+      </mat-card>
+      <mat-card class="card-one">
+        <mat-card-title>Closed</mat-card-title>
+        <div class="d-flex justify-content-center mt-3 ml-5">
+          <circle-progress [percent]=closed_value title={{closed_issues}} [radius]="70" [showSubtitle]="false" [showUnits]="false" [outerStrokeWidth]="6" [innerStrokeWidth]="3"
+            [outerStrokeColor]="'#FF6347'"   [innerStrokeColor]="'#C7E596'" [animation]="true" [animationDuration]="300">
+          </circle-progress>
+        </div>
+      </mat-card>
+      <mat-card class="card-one">
+        <mat-card-title>Reopen</mat-card-title>
+        <div class="d-flex justify-content-center mt-3 ml-5">
+          <circle-progress [percent]=reopened_value title={{reopened_issues}} [radius]="70" [showSubtitle]="false" [showUnits]="false" [outerStrokeWidth]="6" [innerStrokeWidth]="3"
+            [outerStrokeColor]="'#FFD124'"   [innerStrokeColor]="'#C7E596'" [animation]="true" [animationDuration]="300">
+          </circle-progress>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+<hr style="position: relative; top: 30px;">
+  <div class="proj-list">
+    <h2>Issues List</h2>
+    <button mat-raised-button color="warn" (click)="openDialog()" >Create Issue</button>
+  </div>
+  <div class="bg"></div>
+
+  <!-- table -->
+  <div class="containerTable">
+    <div>
+      <mat-form-field appearance="standard">
+        <mat-label>Filter</mat-label>
+        <input matInput (keyup)="applyFilter($event)" #input>
+      </mat-form-field>
+
+      <div class="mat-elevation-z8 ">
+        <table   mat-table [dataSource]="dataSource" matSort>
+
+          <!-- ID Column -->
+          <!-- <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>  </th>
+            <td mat-cell *matCellDef="let row"> {{row.id}} </td>
+          </ng-container> -->
+
+          <!-- Progress Column -->
+          <ng-container matColumnDef="issueName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Issues</th>
+            <td mat-cell *matCellDef="let row"> 
+              {{row.issueName}}
+              <span *ngIf="row.isReopened===true"
+                class="badge badge-info bg-warning text-dark">
+                Reopened ({{row.reopenedCount}})
+              </span>
+             </td>
+          </ng-container>
+
+          <ng-container matColumnDef="projectName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Project Name </th>
+            <td mat-cell *matCellDef="let row"> {{row.projectName}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="count">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>No.of Bugs</th>
+            <td mat-cell *matCellDef="let row"> {{row.count}} </td>
+          </ng-container>
+
+          <!--  -->
+          <ng-container matColumnDef="issueStatus">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Issue Status </th>
+            <td mat-cell *matCellDef="let row"> 
+              
+              <span *ngIf="row.issueStatus==='Active'"
+                class="bg-danger badge">
+                {{row.issueStatus}} 
+              </span>
+              <span *ngIf="row.issueStatus==='Closed'"
+                class="bg-success badge">
+                {{row.issueStatus}} 
+              </span>
+            </td>
+          </ng-container>
+
+          <!--  -->
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Actions </th>
+            <td mat-cell *matCellDef="let row">
+              <div class="button-grp">
+                <button mat-icon-button (click)="editIssue(row)">
+                  <mat-icon >edit</mat-icon>
+                </button>
+                <span style="padding-right: 20px;"></span>
+                <button class="text-white" [class.bg-success]="row.issueStatus =='Active'"
+                [class.bg-danger]="row.issueStatus !=='Active'"
+                  mat-raised-button (click)="editStatus(row)">
+                  {{row.issueStatus=="Closed"? 'Reopen': 'Close'}}
+                </button>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+          <!-- Row shown when there is no matching data. -->
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+          </tr>
+        </table>
+
+        <mat-paginator style="position: sticky; top:32rem" [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+      </div>
+
+    </div>
+  </div>
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+          
+
+

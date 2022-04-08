@@ -1,0 +1,30 @@
+<h2 mat-dialog-title>Edit Project</h2>
+<mat-dialog-content>
+    <mat-form-field *ngFor="let element">
+        <mat-label>Project Name</mat-label>
+        <input matInput required>
+    </mat-form-field><br>
+    <mat-form-field>
+        <mat-label>Client Name</mat-label>
+        <input matInput required>
+    </mat-form-field><br>
+    <mat-form-field>
+        <mat-label>Team Count</mat-label>
+        <input matInput required>
+    </mat-form-field><br>
+    <mat-form-field>
+        <mat-label> Project Status</mat-label>
+        <mat-select>
+            <mat-option value="Active">Active</mat-option>
+            <mat-option value="Closed">Closed</mat-option>
+        </mat-select>
+    </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button color="primary">
+        Save
+    </button>
+    <button mat-button mat-dialog-close>
+        close
+    </button>
+</mat-dialog-actions>
